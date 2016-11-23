@@ -1,4 +1,33 @@
 require 'watir'
+require 'pry'
+
+class TumblrHelper
+
+  @@browser = Watir::Browser.new :chrome
+
+  def self.login
+    if logged_in?
+      return
+    end
+
+  end
+
+  def self.logout
+    unless logged_in?
+      return
+    end
+
+  end
+
+  def self.logged_in?
+    @@browser.cookies.to_a do |c|
+      if c[:name] == 'logged_in' && c[:value] == 1 && c[:domain] == '.tumblr.com'
+        return true
+      end
+    end
+    return false
+  end
+end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
