@@ -3,29 +3,42 @@ require 'pry'
 
 class TumblrHelper
 
-  @@browser = Watir::Browser.new :chrome
+  def self.login browser, email, password
+    if logged_in? browser
+      return
+    end
+    unless browser.url == 'https://www.tumblr.com'
+      browser.goto 'https://www.tumblr.com'
+    end
+    browser.element(id: 'signup_login_button').click
+    browser.element(id: 'signup_determine_email').send_keys email
+    browser.element(id: 'signup_forms_submit').click
+    if browser.checkbox(id: 'persistent').set?
+      browser.div(id: 'persistency').click
+    end
+    browser.element(id: 'login-signin').click
+    browser.element(id: 'login-passwd').send_keys password
+    browser.element(id: 'login-signin').click
+  end
 
-  def self.login
-    if logged_in?
+  def self.logout browser
+    unless logged_in? browser
       return
     end
 
   end
 
-  def self.logout
-    unless logged_in?
-      return
-    end
 
-  end
-
-  def self.logged_in?
-    @@browser.cookies.to_a do |c|
-      if c[:name] == 'logged_in' && c[:value] == 1 && c[:domain] == '.tumblr.com'
+# WAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHH
+  def self.logged_in? browser
+    bool = false
+    bool = browser.cookies.to_a.each do |c|
+      if c[:name] == 'logged_in' && c[:value] == '1' && c[:domain] == '.tumblr.com'
+        binding.pry
         return true
       end
     end
-    return false
+    return bool
   end
 end
 
