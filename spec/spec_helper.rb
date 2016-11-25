@@ -3,7 +3,7 @@ require 'pry'
 
 class TumblrHelper
 
-  def self.login browser, email, password
+  def self.login(browser, email, password)
     if logged_in? browser
       return
     end
@@ -21,7 +21,7 @@ class TumblrHelper
     browser.element(id: 'login-signin').click
   end
 
-  def self.logout browser
+  def self.logout(browser)
     unless logged_in? browser
       return
     end
@@ -30,16 +30,16 @@ class TumblrHelper
 
 
 # WAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHH
-  def self.logged_in? browser
+  def self.logged_in?(browser)
     bool = false
-    bool = browser.cookies.to_a.each do |c|
+    browser.cookies.to_a.each do |c|
       if c[:name] == 'logged_in' && c[:value] == '1' && c[:domain] == '.tumblr.com'
-        binding.pry
-        return true
+        bool = true
       end
     end
     return bool
   end
+
 end
 
 RSpec.configure do |config|
