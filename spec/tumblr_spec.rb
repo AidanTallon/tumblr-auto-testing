@@ -27,7 +27,7 @@ describe 'Tumblr' do
     TumblrHelper.login @browser, @email, @password
     # Test data
     title = 'Test Title'
-    content = 'Test content 123'
+    content = 'Test content 1234567'
     tags = '#testtag #automationtesting'
     # Create post
     sleep 5 # Would be a good idea to find out why this is needed
@@ -36,7 +36,7 @@ describe 'Tumblr' do
     modal.div('class': 'title-field').div('class': 'editor').send_keys title
     modal.div('class': 'caption-field').div('class': 'editor').send_keys content
     modal.div('class': 'tag-input-wrapper').div('class': 'editor').send_keys tags
-    modal.div('class': 'post-form--controls').div('class': 'post-form--save-button').button('text': 'Post').click
+    modal.div('class': 'post-form--controls').div('class': 'post-form--save-button').button(class: 'create_post_button').click
     sleep 5 # Wait for post to happen before navigating away from page
             # May be something that can be implicitly waited for?
 
@@ -46,10 +46,13 @@ describe 'Tumblr' do
     expect(post.text).to include @username
     expect(post.text).to include title
     expect(post.text).to include content
-    expect(post.text).to include tags
+    expect(post.text).to include "\##{tags.gsub('#', '')}"
 
     # Tear down post
-    
+    binding.pry
+    post.div(class: 'post_controls_inner').click
+    @browser.div(class: 'popover--account-popover').div(class: 'ui_dialog').button(class: 'btn_1').click
+
 
   end
 
