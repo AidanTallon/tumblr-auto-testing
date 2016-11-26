@@ -4,17 +4,22 @@ require 'pry'
 class TumblrHelper
 
   @@browser = Watir::Browser.new :chrome
+  @@base_url = 'https://www.tumblr.com'
 
   def self.browser
     @@browser
+  end
+
+  def self.url(path = '/')
+    @@base_url + path
   end
 
   def self.login(email, password)
     if logged_in?
       return
     end
-    unless @@browser.url == 'https://www.tumblr.com'
-      @@browser.goto 'https://www.tumblr.com'
+    unless @@browser.url == self.url
+      @@browser.goto self.url
     end
     @@browser.element(id: 'signup_login_button').click
     @@browser.element(id: 'signup_determine_email').send_keys email
@@ -31,11 +36,9 @@ class TumblrHelper
     unless logged_in?
       return
     end
-
+    # TODO
   end
 
-
-# WAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHH
   def self.logged_in?
     @@browser.cookies.to_a.each do |c|
       if c[:name] == 'logged_in' && c[:value] == '1' && c[:domain] == '.tumblr.com'

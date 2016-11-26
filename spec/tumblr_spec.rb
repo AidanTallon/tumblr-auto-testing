@@ -10,7 +10,7 @@ describe 'Tumblr' do
     unless TumblrHelper.logged_in?
       TumblrHelper.login @email, @password
     end
-    TumblrHelper.browser.goto 'https://www.tumblr.com'
+    TumblrHelper.browser.goto TumblrHelper.url
   end
 
   after(:each) do
@@ -21,7 +21,7 @@ describe 'Tumblr' do
     TumblrHelper.login @email, @password
     sleep 5 # Allows cookies to be updated? I think
     expect(TumblrHelper.logged_in?).to eq true
-    expect(TumblrHelper.browser.url).to eq 'https://www.tumblr.com/dashboard'
+    expect(TumblrHelper.browser.url).to eq TumblrHelper.url '/dashboard'
   end
 
   it 'should be able to post a text post' do
@@ -31,7 +31,7 @@ describe 'Tumblr' do
     tags = '#testtag #automationtesting'
     # Create post
     sleep 5 # Would be a good idea to find out why this is needed
-    TumblrHelper.browser.goto 'https://www.tumblr.com/new/text'
+    TumblrHelper.browser.goto TumblrHelper.url '/new/text'
     modal = TumblrHelper.browser.li('id': 'new_post_buttons')
     modal.div('class': 'title-field').div('class': 'editor').send_keys title
     modal.div('class': 'caption-field').div('class': 'editor').send_keys content
