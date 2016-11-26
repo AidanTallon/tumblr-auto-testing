@@ -30,7 +30,7 @@ describe 'Tumblr' do
     content = "Test content #{rand(20000)}"
     tags = '#testtag #automationtesting'
     # Create post
-    sleep 5 # Would be a good idea to find out why this is needed
+    #sleep 5 # Would be a good idea to find out why this is needed
     @user.goto '/new/text'
     modal = @user.browser.li('id': 'new_post_buttons')
     modal.div(class: 'title-field').div(class: 'editor').send_keys title
