@@ -26,8 +26,8 @@ describe 'Tumblr' do
   it 'should be able to post a text post' do
     TumblrHelper.login @browser, @email, @password
     # Test data
-    title = 'Test Title'
-    content = 'Test content 1234567'
+    title = "Test Title #{rand(20000)}"
+    content = "Test content #{rand(20000)}"
     tags = '#testtag #automationtesting'
     # Create post
     sleep 5 # Would be a good idea to find out why this is needed
@@ -49,11 +49,9 @@ describe 'Tumblr' do
     expect(post.text).to include "\##{tags.gsub('#', '')}"
 
     # Tear down post
-    binding.pry
-    post.div(class: 'post_controls_inner').click
-    @browser.div(class: 'popover--account-popover').div(class: 'ui_dialog').button(class: 'btn_1').click
-
-
+    post.div(class: 'post_control_menu').click
+    post.div(title: 'Delete').click
+    @browser.div(id: 'dialog_0').button(class: 'btn_1').click
   end
 
 end
