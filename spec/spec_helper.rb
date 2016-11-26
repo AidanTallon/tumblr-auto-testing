@@ -39,6 +39,9 @@ class TumblrHelper
     @browser.element(id: 'login-signin').click
     @browser.element(id: 'login-passwd').send_keys @password
     @browser.element(id: 'login-signin').click
+    # Wait for redirect
+    Watir::Wait.until { @browser.titles(text: 'Tumblr')[0].exists? }
+    #@browser.titles(text: 'Tumblr')[0].wait_until_present
   end
 
   def logout

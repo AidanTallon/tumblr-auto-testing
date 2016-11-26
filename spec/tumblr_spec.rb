@@ -20,7 +20,7 @@ describe 'Tumblr' do
 
   it 'should login with correct details' do
     @user.login
-    sleep 5 # Allows cookies to be updated? I think
+    #sleep 5 # Allows cookies to be updated? I think
     expect(@user.logged_in?).to eq true
     expect(@user.browser.url).to eq TumblrHelper.url '/dashboard'
   end
@@ -38,8 +38,10 @@ describe 'Tumblr' do
     modal.div(class: 'caption-field').div(class: 'editor').send_keys content
     modal.div(class: 'tag-input-wrapper').div(class: 'editor').send_keys tags
     modal.div(class: 'post-form--controls').div(class: 'post-form--save-button').button(class: 'create_post_button').click
-    sleep 5 # Wait for post to happen before navigating away from page
-            # May be something that can be implicitly waited for?
+
+    modal.div(class: 'post-form').wait_while_present # Wait for post form to leave page.
+                                                     # This means page can be navigated from
+                                                     # without user being prompted.
 
     # Check post exists
     @user.goto "/blog/#{@user.username}"
