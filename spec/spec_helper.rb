@@ -14,7 +14,7 @@ class TumblrHelper
     @@base_url + path
   end
 
-  def self.login(email, password)
+  def self.login(email = 'rumblydude@hotmail.com', password = 'testpassword123')
     if logged_in?
       return
     end
@@ -36,7 +36,12 @@ class TumblrHelper
     unless logged_in?
       return
     end
-    # TODO
+    unless @@browser.url == self.url('/dashboard')
+      @@browser.goto self.url('/dashboard')
+    end
+    @@browser.div(id: 'tabs_outer_container').button(title: 'Account').click
+    @@browser.a(id: 'logout_button').click
+    @@browser.div(id: 'dialog_0').button(class: 'btn_1').click
   end
 
   def self.logged_in?
