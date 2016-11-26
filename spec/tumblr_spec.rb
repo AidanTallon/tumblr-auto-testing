@@ -6,7 +6,7 @@ describe 'Tumblr' do
 
   before(:each) do
     @user.login
-    @user.browser.goto TumblrHelper.url
+    @user.goto '/'
   end
 
   after(:each) do
@@ -32,7 +32,7 @@ describe 'Tumblr' do
     tags = '#testtag #automationtesting'
     # Create post
     sleep 5 # Would be a good idea to find out why this is needed
-    @user.browser.goto TumblrHelper.url '/new/text'
+    @user.goto '/new/text'
     modal = @user.browser.li('id': 'new_post_buttons')
     modal.div('class': 'title-field').div('class': 'editor').send_keys title
     modal.div('class': 'caption-field').div('class': 'editor').send_keys content
@@ -42,7 +42,7 @@ describe 'Tumblr' do
             # May be something that can be implicitly waited for?
 
     # Check post exists
-    @user.browser.goto "https://www.tumblr.com/blog/#{@user.username}"
+    @user.goto "/blog/#{@user.username}"
     post = @user.browser.div('class': 'post_wrapper')
     expect(post.text).to include @user.username
     expect(post.text).to include title

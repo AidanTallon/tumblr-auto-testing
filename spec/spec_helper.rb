@@ -19,12 +19,16 @@ class TumblrHelper
     @username = username
   end
 
+  def goto(path)
+    @browser.goto self.class.url path
+  end
+
   def login
     if logged_in?
       return
     end
     unless @browser.url == self.class.url
-      @browser.goto self.class.url
+      goto '/'
     end
     @browser.element(id: 'signup_login_button').click
     @browser.element(id: 'signup_determine_email').send_keys @email
@@ -42,7 +46,7 @@ class TumblrHelper
       return
     end
     unless @browser.url == self.class.url('/dashboard')
-      @browser.goto self.class.url('/dashboard')
+      goto '/dashboard'
     end
     @browser.div(id: 'tabs_outer_container').button(title: 'Account').click
     @browser.a(id: 'logout_button').click
