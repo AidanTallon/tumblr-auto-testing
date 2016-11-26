@@ -41,7 +41,6 @@ class TumblrHelper
     @browser.element(id: 'login-signin').click
     # Wait for redirect
     Watir::Wait.until { @browser.titles(text: 'Tumblr')[0].exists? }
-    #@browser.titles(text: 'Tumblr')[0].wait_until_present
   end
 
   def logout
@@ -54,6 +53,8 @@ class TumblrHelper
     @browser.div(id: 'tabs_outer_container').button(title: 'Account').click
     @browser.a(id: 'logout_button').click
     @browser.div(id: 'dialog_0').button(class: 'btn_1').click
+    # Wait for redirect
+    Watir::Wait.until { @browser.titles(text: 'Log in | Tumblr')[0].exists? }
   end
 
   def logged_in?

@@ -20,7 +20,6 @@ describe 'Tumblr' do
 
   it 'should login with correct details' do
     @user.login
-    #sleep 5 # Allows cookies to be updated? I think
     expect(@user.logged_in?).to eq true
     expect(@user.browser.url).to eq TumblrHelper.url '/dashboard'
   end
@@ -60,7 +59,6 @@ describe 'Tumblr' do
   it 'should logout' do
     expect(@user.logged_in?).to eq true
     @user.logout
-    sleep 5
     expect(@user.logged_in?).to eq false
   end
 
