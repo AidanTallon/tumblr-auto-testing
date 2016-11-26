@@ -55,4 +55,11 @@ describe 'Tumblr' do
     @user.browser.div(id: 'dialog_0').button(class: 'btn_1').click
   end
 
+  it 'should logout' do
+    expect(@user.logged_in?).to eq true
+    @user.logout
+    sleep 5
+    expect(@user.logged_in?).to eq false
+  end
+
 end
