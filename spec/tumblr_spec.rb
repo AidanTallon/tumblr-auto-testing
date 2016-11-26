@@ -1,27 +1,28 @@
 describe 'Tumblr' do
 
   before(:all) do
-    @username = 'auntiemation'
-    @email = 'rumblydude@hotmail.com'
-    @password = 'testpassword123'
+    @user = TumblrHelper.new
   end
 
   before(:each) do
-    unless TumblrHelper.logged_in?
-      TumblrHelper.login @email, @password
-    end
-    TumblrHelper.browser.goto TumblrHelper.url
+    @user.login
+    @user.browser.goto TumblrHelper.url
   end
 
   after(:each) do
 
   end
 
+  after(:all) do
+    @user.logout
+    @user.browser.close
+  end
+
   it 'should login with correct details' do
-    TumblrHelper.login @email, @password
+    @user.login
     sleep 5 # Allows cookies to be updated? I think
-    expect(TumblrHelper.logged_in?).to eq true
-    expect(TumblrHelper.browser.url).to eq TumblrHelper.url '/dashboard'
+    expect(@user.logged_in?).to eq true
+    expect(@user.browser.url).to eq TumblrHelper.url '/dashboard'
   end
 
   it 'should be able to post a text post' do
@@ -31,8 +32,8 @@ describe 'Tumblr' do
     tags = '#testtag #automationtesting'
     # Create post
     sleep 5 # Would be a good idea to find out why this is needed
-    TumblrHelper.browser.goto TumblrHelper.url '/new/text'
-    modal = TumblrHelper.browser.li('id': 'new_post_buttons')
+    @user.browser.goto TumblrHelper.url '/new/text'
+    modal = @user.browser.li('id': 'new_post_buttons')
     modal.div('class': 'title-field').div('class': 'editor').send_keys title
     modal.div('class': 'caption-field').div('class': 'editor').send_keys content
     modal.div('class': 'tag-input-wrapper').div('class': 'editor').send_keys tags
@@ -41,9 +42,9 @@ describe 'Tumblr' do
             # May be something that can be implicitly waited for?
 
     # Check post exists
-    TumblrHelper.browser.goto "https://www.tumblr.com/blog/#{@username}"
-    post = TumblrHelper.browser.div('class': 'post_wrapper')
-    expect(post.text).to include @username
+    @user.browser.goto "https://www.tumblr.com/blog/#{@user.username}"
+    post = @user.browser.div('class': 'post_wrapper')
+    expect(post.text).to include @user.username
     expect(post.text).to include title
     expect(post.text).to include content
     expect(post.text).to include "\##{tags.gsub('#', '')}"
@@ -51,7 +52,7 @@ describe 'Tumblr' do
     # Tear down post
     post.div(class: 'post_control_menu').click
     post.div(title: 'Delete').click
-    TumblrHelper.browser.div(id: 'dialog_0').button(class: 'btn_1').click
+    @user.browser.div(id: 'dialog_0').button(class: 'btn_1').click
   end
 
 end
