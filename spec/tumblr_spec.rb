@@ -1,7 +1,8 @@
 describe 'Tumblr' do
 
   before(:all) do
-    @user = TumblrHelper.new
+    TumblrHelper.load_yaml './spec/users.yml'
+    @user = TumblrHelper.users[0]
   end
 
   before(:each) do

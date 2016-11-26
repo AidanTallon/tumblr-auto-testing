@@ -1,5 +1,6 @@
 require 'watir'
 require 'pry'
+require 'yaml'
 
 class TumblrHelper
   # Helper class for tests.
@@ -9,10 +10,21 @@ class TumblrHelper
   attr_accessor :email, :password, :username, :browser
 
   @@base_url = 'https://www.tumblr.com'
+  @@users = [] # Holds all instances of TumblrHelper
 
   def self.url(path = '/')
     # Helper method to return tumblr url
     @@base_url + path
+  end
+
+  def self.users
+    @@users
+  end
+
+  def self.load_yaml(path)
+    YAML.load_file(path).each do |file|
+      TumblrHelper.new file['email'], file['password'], file['username']
+    end
   end
 
   def initialize(email = 'rumblydude@hotmail.com',
@@ -22,6 +34,8 @@ class TumblrHelper
     @email = email
     @password = password
     @username = username
+
+    @@users << self
   end
 
   def goto(path)
