@@ -4,14 +4,13 @@ describe 'Tumblr' do
     @username = 'auntiemation'
     @email = 'rumblydude@hotmail.com'
     @password = 'testpassword123'
-    @browser = Watir::Browser.new :chrome
   end
 
   before(:each) do
-    unless TumblrHelper.logged_in? @browser
-      TumblrHelper.login @browser, @email, @password
+    unless TumblrHelper.logged_in?
+      TumblrHelper.login @email, @password
     end
-    @browser.goto 'https://www.tumblr.com'
+    TumblrHelper.browser.goto 'https://www.tumblr.com'
   end
 
   after(:each) do
@@ -19,10 +18,10 @@ describe 'Tumblr' do
   end
 
   it 'should login with correct details' do
-    TumblrHelper.login @browser, @email, @password
+    TumblrHelper.login @email, @password
     sleep 5 # Allows cookies to be updated? I think
-    expect(TumblrHelper.logged_in? @browser).to eq true
-    expect(@browser.url).to eq 'https://www.tumblr.com/dashboard'
+    expect(TumblrHelper.logged_in?).to eq true
+    expect(TumblrHelper.browser.url).to eq 'https://www.tumblr.com/dashboard'
   end
 
   it 'should be able to post a text post' do
@@ -32,8 +31,8 @@ describe 'Tumblr' do
     tags = '#testtag #automationtesting'
     # Create post
     sleep 5 # Would be a good idea to find out why this is needed
-    @browser.goto 'https://www.tumblr.com/new/text'
-    modal = @browser.li('id': 'new_post_buttons')
+    TumblrHelper.browser.goto 'https://www.tumblr.com/new/text'
+    modal = TumblrHelper.browser.li('id': 'new_post_buttons')
     modal.div('class': 'title-field').div('class': 'editor').send_keys title
     modal.div('class': 'caption-field').div('class': 'editor').send_keys content
     modal.div('class': 'tag-input-wrapper').div('class': 'editor').send_keys tags
@@ -42,8 +41,8 @@ describe 'Tumblr' do
             # May be something that can be implicitly waited for?
 
     # Check post exists
-    @browser.goto "https://www.tumblr.com/blog/#{@username}"
-    post = @browser.div('class': 'post_wrapper')
+    TumblrHelper.browser.goto "https://www.tumblr.com/blog/#{@username}"
+    post = TumblrHelper.browser.div('class': 'post_wrapper')
     expect(post.text).to include @username
     expect(post.text).to include title
     expect(post.text).to include content
@@ -52,7 +51,7 @@ describe 'Tumblr' do
     # Tear down post
     post.div(class: 'post_control_menu').click
     post.div(title: 'Delete').click
-    @browser.div(id: 'dialog_0').button(class: 'btn_1').click
+    TumblrHelper.browser.div(id: 'dialog_0').button(class: 'btn_1').click
   end
 
 end
