@@ -34,16 +34,16 @@ describe 'Tumblr' do
     sleep 5 # Would be a good idea to find out why this is needed
     @user.goto '/new/text'
     modal = @user.browser.li('id': 'new_post_buttons')
-    modal.div('class': 'title-field').div('class': 'editor').send_keys title
-    modal.div('class': 'caption-field').div('class': 'editor').send_keys content
-    modal.div('class': 'tag-input-wrapper').div('class': 'editor').send_keys tags
-    modal.div('class': 'post-form--controls').div('class': 'post-form--save-button').button(class: 'create_post_button').click
+    modal.div(class: 'title-field').div(class: 'editor').send_keys title
+    modal.div(class: 'caption-field').div(class: 'editor').send_keys content
+    modal.div(class: 'tag-input-wrapper').div(class: 'editor').send_keys tags
+    modal.div(class: 'post-form--controls').div(class: 'post-form--save-button').button(class: 'create_post_button').click
     sleep 5 # Wait for post to happen before navigating away from page
             # May be something that can be implicitly waited for?
 
     # Check post exists
     @user.goto "/blog/#{@user.username}"
-    post = @user.browser.div('class': 'post_wrapper')
+    post = @user.browser.div(class: 'post_wrapper')
     expect(post.text).to include @user.username
     expect(post.text).to include title
     expect(post.text).to include content
