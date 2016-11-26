@@ -4,16 +4,18 @@ describe 'Tumblr' do
     @username = 'auntiemation'
     @email = 'rumblydude@hotmail.com'
     @password = 'testpassword123'
+    @browser = Watir::Browser.new :chrome
   end
 
   before(:each) do
-    @browser = Watir::Browser.new :chrome
+    unless TumblrHelper.logged_in? @browser
+      TumblrHelper.login @browser, @email, @password
+    end
     @browser.goto 'https://www.tumblr.com'
   end
 
   after(:each) do
-    TumblrHelper.logout @browser
-    @browser.close
+
   end
 
   it 'should login with correct details' do
@@ -24,7 +26,6 @@ describe 'Tumblr' do
   end
 
   it 'should be able to post a text post' do
-    TumblrHelper.login @browser, @email, @password
     # Test data
     title = "Test Title #{rand(20000)}"
     content = "Test content #{rand(20000)}"
