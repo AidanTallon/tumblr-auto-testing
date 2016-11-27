@@ -10,7 +10,7 @@ class TumblrHelper
   attr_accessor :email, :password, :username, :browser
 
   @@base_url = 'https://www.tumblr.com'
-  @@users = [] # Holds all instances of TumblrHelper
+  @@users = {} # Holds all instances of TumblrHelper with key of username
 
   def self.url(path = '/')
     # Helper method to return tumblr url
@@ -22,6 +22,7 @@ class TumblrHelper
   end
 
   def self.load_yaml(path)
+    # Load user information from yaml file
     YAML.load_file(path).each do |file|
       TumblrHelper.new file['email'], file['password'], file['username']
     end
@@ -35,7 +36,7 @@ class TumblrHelper
     @password = password
     @username = username
 
-    @@users << self
+    @@users[self.username] = self
   end
 
   def goto(path)

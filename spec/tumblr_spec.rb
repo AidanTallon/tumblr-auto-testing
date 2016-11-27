@@ -2,7 +2,7 @@ describe 'Tumblr' do
 
   before(:all) do
     TumblrHelper.load_yaml './spec/users.yml'
-    @user = TumblrHelper.users[0]
+    @user = TumblrHelper.users['auntiemation']
   end
 
   before(:each) do
